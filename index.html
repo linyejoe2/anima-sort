@@ -4,7 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>anima-sort-1</title>
+  <title>anima-sort</title>
+  <meta name="description" content="anima-sort help you visualizing sorting algorithms, includes some adjustable parameters.">
+  <meta property="og:description" content="anima-sort help you visualizing sorting algorithms, includes some adjustable parameters.">
+  <meta property="og:title" content="anima-sort">
+  <meta property="og:url" content="https://linyejoe2.site/anima-sort/">
   <style>
     /* CSS */
     button {
@@ -117,7 +121,7 @@
           <label>Quick sort (inplace) use time: <span id="quickInplaceTime">0</span> s</label>
         </div>
         <div>
-          <button id="quickSortBtn">Quick sort</button>
+          <button id="quickSortBtn">Quick sort (TODO)</button>
           <label>Quick sort use time: <span id="quickTime">0</span> s</label>
         </div>
       </div>
@@ -409,6 +413,7 @@
     }
 
     async function quickSortInplace(arr, left, right) {
+      if (stopFlag) return
       if (right > left) {
         const newPivot = await partition(arr, left, right, right)
         await quickSortInplace(arr, left, newPivot - 1)
@@ -423,6 +428,7 @@
 
       let storeIndex = left
       for (let i = left; i < right; i++) {
+        if (stopFlag) return storeIndex
         if (numbers[i] < pivotVlaue) {
           await swap(storeIndex, i)
           // const t = numbers[storeIndex]
