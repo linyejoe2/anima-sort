@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>anima-sort-1</title>
+  <style>
+    /* CSS */
+    button {
+      appearance: none;
+      background-color: #FAFBFC;
+      border: 1px solid rgba(27, 31, 35, 0.15);
+      border-radius: 6px;
+      box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+      box-sizing: border-box;
+      color: #24292E;
+      cursor: pointer;
+      display: inline-block;
+      font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      list-style: none;
+      padding: 6px 16px;
+      position: relative;
+      transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      vertical-align: middle;
+      white-space: nowrap;
+      word-wrap: break-word;
+    }
+
+    button:hover {
+      background-color: #F3F4F6;
+      text-decoration: none;
+      transition-duration: 0.1s;
+    }
+
+    button:disabled {
+      background-color: #FAFBFC;
+      border-color: rgba(27, 31, 35, 0.15);
+      color: #959DA5;
+      cursor: default;
+    }
+
+    button:active {
+      background-color: #EDEFF2;
+      box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+      transition: none 0s;
+    }
+
+    button:focus {
+      outline: 1px transparent;
+    }
+
+    button:before {
+      display: none;
+    }
+
+    button:-webkit-details-marker {
+      display: none;
+    }
+
+    * {
+      margin: 0px;
+      padding: 0px;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      overflow: hidden;
+      font-family: ubuntu;
+
+    }
+  </style>
+</head>
+
+<body>
+  <div id="parameter" style="margin: 20px;">
+
+    <div>
+      <button id="pushShiftBtn">shift&push</button>
+      <button id="resetBtn">reset</button>
+      <label for="delay">delay</label>
+      <input id="delay" type="text" value="100">
+      <label for="numbersOfNumber">numbers of number</label>
+      <input id="numbersOfNumber" type="text" value="25"><br><br>
+    </div>
+    <div style="display: flex;">
+      <div style="margin-right: 10px;">
+        <div style="margin-bottom: 5px;">
+          <button id="bubbleSortBtn">Bubble sort</button>
+          <label>Bubble sort use time: <span id="bubbleTime">0</span> s</label>
+        </div>
+        <div>
+          <button id="selectionSortBtn">Selection sort</button>
+          <label>Selection sort use time: <span id="selectionTime">0</span> s</label>
+        </div>
+      </div>
+      <div style="margin-right: 10px;">
+        <div style="margin-bottom: 5px;">
+          <button id="insertionSortBtn">Insertion sort</button>
+          <label>Insertion sort use time: <span id="insertionTime">0</span> s</label>
+        </div>
+        <div>
+          <button id="mergeSortBtn">Merge sort</button>
+          <label>Merge sort use time: <span id="mergeTime">0</span> s</label>
+        </div>
+      </div>
+      <div>
+        <div style="margin-bottom: 5px;">
+          <button id="quickSortInplaceBtn">Quick sort (inplace)</button>
+          <label>Quick sort (inplace) use time: <span id="quickInplaceTime">0</span> s</label>
+        </div>
+        <div>
+          <button id="quickSortBtn">Quick sort</button>
+          <label>Quick sort use time: <span id="quickTime">0</span> s</label>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div id="sortingDiv" style="height: 70dvh; width: 90dvw; margin-left: 5dvw; margin-top: 15dvh; position: absolute; bottom: 25px;">
+    <canvas id="sortingCanvas"></canvas>
+  </div>
+
+  <script>
+    let numbers = []
+    let currentIndex = -1
+    let secondIndex = -1
+    let thirdIndex = -1
+    let stopFlag = false
+    let bubbleTime
+    let selectionTime
+    let insertionTime
+    let mergeTime
+    let mergeCombineIndex = 0
+    let mergeCombineSize = 0
+    let quickInplaceTime
+    let delayMs = parseInt(document.getElementById("delay").value)
+    let numbersOfNumber = parseInt(document.getElementById("numbersOfNumber").value)
+
+    function reset() {
+      stopSort()
+      currentIndex = -1
+      secondIndex = -1
+      generateNumbers(numbersOfNumber)
+      // selectionTime.textContent = 0
+    }
+
+    function stopSort() {
+      stopFlag = true
+      // delay(delayMs - 1).then(() => stopFlag = false)
+    }
+
+    async function updateUseTimeLabel(label) {
+      await delay(10)
+      let t = (((parseFloat(label.textContent) * 100) + 1) / 100).toString()
+      // if (t.length > 3) t = t.slice(0, -2) + t.slice
+      t = /.*\..?.?.?|^[0-9]*/.exec(t)[0]
+      label.textContent = t
+      if (stopFlag) return
+      updateUseTimeLabel(label)
+    }
+
+    function generateNumbers(count) {
+      numbers = []
+      for (let i = 0; i < count; i++) {
+        let randomNumber = Math.floor(Math.random() * 100) + 1; // 生成 1 到 100 之間的數字
+        numbers.push(randomNumber);
+      }
+    }
+
+    function pushShift() {
+      numbers.push(numbers.shift())
+    }
+
+    function startBubbleSort() {
+      bubbleTime.textContent = 0
+      stopFlag = false
+      updateUseTimeLabel(bubbleTime)
+      bubbleSort()
+    }
+
+    async function bubbleSort(j = 0) {
+      let haveSort = false
+
+      for (let i = 0; i < numbers.length - j; i++) {
+        if (stopFlag) return
+        currentIndex = i
+        if (numbers[i + 1] < numbers[i]) {
+          const temp = numbers[i + 1]
+          numbers[i + 1] = numbers[i]
+          numbers[i] = temp
+          haveSort = true
+        }
+        await delay(delayMs)
+      }
+      // await delay(30)
+      if (haveSort) return bubbleSort(j + 1)
+      stopFlag = true
+    }
+
+    function startSelectionSort() {
+      selectionTime.textContent = 0
+      stopFlag = false
+      updateUseTimeLabel(selectionTime)
+      selectionSort()
+    }
+
+    async function selectionSort(i = 0) {
+      let lower = i
+
+      for (let j = i; j < numbers.length; j++) {
+        if (stopFlag) return
+        currentIndex = j
+        if (numbers[j] < numbers[lower]) lower = j
+        secondIndex = lower
+        await delay(delayMs)
+      }
+      const temp = numbers[i]
+      numbers[i] = numbers[lower]
+      numbers[lower] = temp
+
+
+      if (i == numbers.length - 1) return stopFlag = true
+      selectionSort(i + 1)
+    }
+
+    function startInsertionSort() {
+      insertionTime.textContent = 0
+      stopFlag = false
+      updateUseTimeLabel(insertionTime)
+      insertionSort()
+    }
+
+    async function insertionSort() {
+      for (let i = 1; i < numbers.length + 1; i++) {
+        for (let j = i - 1; j >= 1; j--) {
+          if (stopFlag) return
+          currentIndex = i
+          secondIndex = j
+
+          if (numbers[j] > numbers[j - 1]) {
+            break
+          }
+          console.log(numbers)
+          const temp = numbers[j - 1]
+          numbers[j - 1] = numbers[j]
+          numbers[j] = temp
+          await delay(delayMs)
+        }
+      }
+      return stopFlag = true
+    }
+
+    // function startMergeSort() {
+    //   mergeTime.textContent = 0
+    //   stopFlag = false
+    //   updateUseTimeLabel(mergeTime)
+    //   numbers = mergeSort(numbers)
+    //   // console.log(numbers)
+    //   return stopFlag = true
+    // }
+
+    // function mergeSort(arr) {
+    //   if (stopFlag) return
+
+    //   if (arr.length > 2) {
+    //     return mergeSortCombine(mergeSort(arr.slice(0, arr.length / 2)), mergeSort(arr.slice(arr.length / 2)))
+    //   } else if (arr.length == 2) return mergeSortSwap(arr)
+    //   return arr
+    // }
+
+    // function mergeSortSwap(arr) {
+    //   if (stopFlag) return
+
+    //   if (arr[1] < arr[0]) return [arr[1], arr[0]]
+    //   return arr
+    // }
+
+    // function mergeSortCombine(main, add) {
+    //   if (stopFlag) return
+
+    //   let merged = [];
+    //   let i = 0
+    //   let j = 0
+    //   while (merged.length < main.length + add.length) {
+    //     if (main[i] < add[j] || j >= add.length) {
+    //       merged.push(main[i])
+    //       i++
+    //     } else {
+    //       merged.push(add[j])
+    //       j++
+    //     }
+    //   }
+    //   return merged
+    // }
+
+    async function startMergeSortWithAnima() {
+      mergeTime.textContent = 0
+      mergeCombineIndex = 0
+      stopFlag = false
+      updateUseTimeLabel(mergeTime)
+      // numbers = await mergeSort(numbers)
+      const numberObjArr = []
+      numbers.forEach((v, i) => {
+        numberObjArr.push({
+          v,
+          i
+        })
+      })
+      const res = await mergeSort(numberObjArr)
+      // res.forEach((e, i) => {
+      //   numbers[i] = e.v
+      // })
+      console.log(numbers)
+      return stopFlag = true
+    }
+
+    async function mergeSort(arr) {
+      if (stopFlag) return
+
+      if (arr.length > 2) {
+        return await mergeSortCombine(await mergeSort(arr.slice(0, arr.length / 2)), await mergeSort(arr.slice(arr.length / 2), arr.length))
+      } else if (arr.length == 2) return await mergeSortSwap(arr)
+      return arr
+    }
+
+    async function mergeSortSwap(arr) {
+      // anima
+      if (stopFlag) return
+      currentIndex = arr[0].i
+      secondIndex = arr[1].i
+      await delay(delayMs)
+      if (arr[1].v < arr[0].v) {
+        const t = numbers[arr[0].i]
+        numbers[arr[0].i] = numbers[arr[1].i]
+        numbers[arr[1].i] = t
+      }
+
+      // algo
+      if (arr[1].v < arr[0].v) return [arr[1], arr[0]]
+      return arr
+    }
+
+    async function mergeSortCombine(main, add) {
+      if (stopFlag) return
+
+      let merged = [];
+      while (main.length > 0 || add.length > 0) {
+        // algo
+        if (main.length > 0 && add.length <= 0) {
+          merged.push(main.shift())
+        } else if (add.length > 0 && main.length <= 0) {
+          merged.push(add.shift())
+        } else if (main[0].v < add[0].v) {
+          merged.push(main.shift())
+        } else {
+          merged.push(add.shift())
+        }
+        // if (j >= add.length main[i].v < add[j].v) {
+        //   merged.push(main[i])
+        //   i++
+        // } else {
+        //   merged.push(add[j])
+        //   j++
+        // }
+      }
+      // console.log(merged)
+
+      // anima
+      mergeCombineIndex = merged[0].i
+      for (const e of merged) {
+        mergeCombineIndex = Math.min(mergeCombineIndex, e.i)
+      }
+      for (let i = 0; i < merged.length; i++) {
+        numbers[i + mergeCombineIndex] = merged[i].v
+        await delay(delayMs)
+      }
+      // mergeCombineSize = Math.max(merged.length, mergeCombineSize)
+
+
+      return merged
+    }
+
+    async function startQuickSortInplace() {
+      stopFlag = false
+      quickInplaceTime.textContent = 0
+      updateUseTimeLabel(quickInplaceTime)
+
+      quickSortInplace(numbers, 0, numbers.length - 1).then(e => {
+        thirdIndex = -1
+        return stopFlag = true
+      })
+    }
+
+    async function swap(i, j) {
+      currentIndex = i
+      secondIndex = j
+      await delay()
+      const t = numbers[i]
+      numbers[i] = numbers[j]
+      numbers[j] = t
+    }
+
+    async function quickSortInplace(arr, left, right) {
+      if (right > left) {
+        const newPivot = await partition(arr, left, right, right)
+        await quickSortInplace(arr, left, newPivot - 1)
+        await quickSortInplace(arr, newPivot + 1, right)
+      }
+    }
+
+    async function partition(arr, left, right, pivot) {
+      let pivotVlaue = arr[pivot]
+      await swap(pivot, right)
+      thirdIndex = pivot
+
+      let storeIndex = left
+      for (let i = left; i < right; i++) {
+        if (numbers[i] < pivotVlaue) {
+          await swap(storeIndex, i)
+          // const t = numbers[storeIndex]
+          // numbers[storeIndex] = numbers[i]
+          // numbers[i] = t
+          storeIndex++
+        }
+      }
+
+      await swap(storeIndex, right)
+
+      return storeIndex
+    }
+
+    ////
+    //// Animation part.
+    ////
+    const div = document.getElementById('sortingDiv')
+    let canvas
+    let ctx
+
+    function drawBars() {
+      // 設置畫布背景
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除畫布
+
+      for (let i = 0; i < numbers.length; i++) {
+        drawBar(i)
+      }
+      return
+    }
+
+    function drawBar(index) {
+      const barWidth = canvas.width / numbers.length; // 每個長條的寬度
+      const barHeight = (canvas.height - 20) * numbers[index] / 100
+
+      index == secondIndex ? ctx.fillStyle = "lightgreen" :
+        index == currentIndex ? ctx.fillStyle = "red" :
+        index == thirdIndex ? ctx.fillStyle = "lightyellow" :
+        ctx.fillStyle = 'skyblue';
+      ctx.fillRect(index * barWidth, canvas.height - barHeight, barWidth - 2, barHeight);
+
+      ctx.fillStyle = 'black';
+      ctx.fillText(numbers[index], index * barWidth + barWidth / 40, canvas.height - barHeight - 10);
+    }
+
+    function updateVariable() {
+      canvas.width = div.offsetWidth;
+      canvas.height = div.offsetHeight;
+      delayMs = parseInt(document.getElementById("delay").value)
+      numbersOfNumber = parseInt(document.getElementById("numbersOfNumber").value)
+      // bubbleTime.textContent = (parseInt(bubbleTime.textContent) + 1).toString()
+    }
+
+    function init() {
+      document.getElementById("pushShiftBtn").addEventListener("click", pushShift)
+      document.getElementById("bubbleSortBtn").addEventListener("click", startBubbleSort)
+      document.getElementById("selectionSortBtn").addEventListener("click", startSelectionSort)
+      document.getElementById("insertionSortBtn").addEventListener("click", startInsertionSort)
+      document.getElementById("mergeSortBtn").addEventListener("click", startMergeSortWithAnima)
+      document.getElementById("quickSortInplaceBtn").addEventListener("click", startQuickSortInplace)
+      document.getElementById("resetBtn").addEventListener("click", reset)
+      canvas = document.getElementById('sortingCanvas');
+      bubbleTime = document.getElementById("bubbleTime")
+      selectionTime = document.getElementById("selectionTime")
+      insertionTime = document.getElementById("insertionTime")
+      mergeTime = document.getElementById("mergeTime")
+      quickInplaceTime = document.getElementById("quickInplaceTime")
+
+      canvas.width = div.offsetWidth;
+      canvas.height = div.offsetHeight;
+
+      ctx = canvas.getContext('2d');
+      generateNumbers(numbersOfNumber); // 生成隨機數字
+      drawBars(); // 繪製長條圖
+      window.requestAnimationFrame(loop);
+    }
+
+    window.onload = init; // 頁面加載後執行初始化
+
+    window.requestAnimationFrame =
+      window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.oRequestAnimationFrame ||
+      window.msRequestAnimationFrame ||
+      function(callback) {
+        window.setTimeout(callback, 1000 / 40);
+      };
+
+    function loop() {
+      updateVariable()
+      drawBars();
+      window.requestAnimationFrame(loop);
+    }
+
+    const delay = (ms = delayMs) => new Promise(resolve => setTimeout(resolve, ms));
+  </script>
+</body>
+
+</html>
