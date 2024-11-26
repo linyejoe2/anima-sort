@@ -76,64 +76,264 @@
     }
 
     body {
-      overflow: hidden;
-      font-family: ubuntu;
-
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      display: flex;
+      /* justify-content: center;
+      align-items: center; */
+      height: 100vh;
     }
+
+    .container {
+      background-color: #fff;
+      /* border-radius: 10px; */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px 30px;
+      max-width: 20dvw;
+      width: 100%;
+    }
+
+    .container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      color: #555;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #666;
+    }
+
+    .form-group input {
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .button-group button {
+      padding: 10px 15px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .button-group button#pushShiftBtn {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    .button-group button#pushShiftBtn:hover {
+      background-color: #0056b3;
+    }
+
+    .button-group button#resetBtn {
+      background-color: #dc3545;
+      color: #fff;
+    }
+
+    .button-group button#resetBtn:hover {
+      background-color: #a71d2a;
+    }
+
+    .button-group button:active {
+      transform: scale(0.98);
+    }
+
+    /* Styles for the sorting section */
+    .sorting-section {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .sort-column {
+      flex: 1 1 calc(25% - 10px);
+      margin: 0 5px 20px;
+    }
+
+    .sort-div {
+      flex: 1 1 calc(25% - 10px);
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #f8f9fa;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      transition: box-shadow 0.3s;
+    }
+
+    .sort-div:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .sort-button {
+      background-color: #6c757d;
+      color: #fff;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .sort-button:hover {
+      background-color: #495057;
+    }
+
+    .sort-button:active {
+      transform: scale(0.95);
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      border-radius: 20px;
+      background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    /* #parameter::-webkit-scrollbar {
+      display: none;
+    }
+
+    #parameter {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    } */
+
+    /* .sort-div {
+      display: flex;
+    }
+
+    .sort-button {
+      margin-right: 5px;
+    } */
   </style>
 </head>
 
 <body>
-  <div id="parameter" style="margin: 20px;">
+  <div id="parameter" style="overflow: scroll;overflow-x: hidden;">
+    <div class="container">
+      <h1>Setting</h1>
+      <div class="form-group">
+        <label for="delay">Delay</label>
+        <input id="delay" type="text" value="100">
+      </div>
+      <div class="form-group">
+        <label for="numbersLowerBound">Numbers Lower Bound</label>
+        <input id="numbersLowerBound" type="text" value="1">
+      </div>
+      <div class="form-group">
+        <label for="numbersUpperBound">Numbers Upper Bound</label>
+        <input id="numbersUpperBound" type="text" value="100">
+      </div>
+      <div class="form-group">
+        <label for="numbersOfNumber">Numbers of Number</label>
+        <input id="numbersOfNumber" type="text" value="25">
+      </div>
+      <div class="button-group">
+        <button id="pushShiftBtn">Shift & Push</button>
+        <button id="resetBtn">Reset</button>
+      </div>
 
-    <div>
-      <button id="pushShiftBtn">shift&push</button>
-      <button id="resetBtn">reset</button>
-      <label for="delay">delay</label>
-      <input id="delay" type="text" value="100">
-      <label for="numbersOfNumber">numbers of number</label>
-      <input id="numbersOfNumber" type="text" value="25"><br><br>
-    </div>
-    <div style="display: flex;">
-      <div style="margin-right: 10px;">
-        <div style="margin-bottom: 5px;">
-          <button id="bubbleSortBtn">Bubble sort</button>
-          <label>Bubble sort use time: <span id="bubbleTime">0</span> s</label>
+      <div class="sorting-section">
+        <div class="sort-div">
+          <button class="sort-button" id="bubbleSortBtn">Bubble sort</button>
+          <label>Bubble sort use time: </label><label><span id="bubbleTime">0</span> s</label>
         </div>
-        <div>
-          <button id="selectionSortBtn">Selection sort</button>
-          <label>Selection sort use time: <span id="selectionTime">0</span> s</label>
+        <div class="sort-div">
+          <button class="sort-button" id="selectionSortBtn">Selection sort</button>
+          <label>Selection sort use time: </label><label><span id="selectionTime">0</span> s</label>
         </div>
-      </div>
-      <div style="margin-right: 10px;">
-        <div style="margin-bottom: 5px;">
-          <button id="insertionSortBtn">Insertion sort</button>
-          <label>Insertion sort use time: <span id="insertionTime">0</span> s</label>
+        <div class="sort-div">
+          <button class="sort-button" id="insertionSortBtn">Insertion sort</button>
+          <label>Insertion sort use time: </label><label><span id="insertionTime">0</span> s</label>
         </div>
-        <div>
-          <button id="mergeSortBtn">Merge sort</button>
-          <label>Merge sort use time: <span id="mergeTime">0</span> s</label>
+        <div class="sort-div">
+          <button class="sort-button" id="mergeSortBtn">Merge sort</button>
+          <label>Merge sort use time: </label><label><span id="mergeTime">0</span> s</label>
         </div>
-      </div>
-      <div>
-        <div style="margin-bottom: 5px;">
-          <button id="quickSortInplaceBtn">Quick sort (inplace)</button>
-          <label>Quick sort (inplace) use time: <span id="quickInplaceTime">0</span> s</label>
+        <div class="sort-div">
+          <button class="sort-button" id="quickSortBtn">Quick sort (TODO)</button>
+          <label>Quick sort use time: </label><label><span id="quickTime">0</span> s</label>
         </div>
-        <div>
-          <button id="quickSortBtn">Quick sort (TODO)</button>
-          <label>Quick sort use time: <span id="quickTime">0</span> s</label>
+        <div class="sort-div">
+          <button class="sort-button" id="quickSortInplaceBtn">Quick sort (inplace)</button>
+          <label>Quick sort (inplace) use time: </label><label><span id="quickInplaceTime">0</span> s</label>
+        </div>
+        <div class="sort-div">
+          <button class="sort-button" id="countingSortBtn">Counting sort</button>
+          <label>Counting sort use time: </label><label><span id="countingTime">0</span> s</label>
+        </div>
+        <div class="sort-div">
+          <button class="sort-button" id="bucketSortBtn">Bucket sort (TODO)</button>
+          <label>Bucket sort use time: </label><label><span id="bucketTime">0</span> s</label>
         </div>
       </div>
+
     </div>
   </div>
-  </div>
-  <div id="sortingDiv" style="height: 70dvh; width: 90dvw; margin-left: 5dvw; margin-top: 15dvh; position: absolute; bottom: 25px;">
+
+  <div id="sortingDiv" style="height: 95dvh; width: 77dvw; margin-left: 22dvw; margin-top: 15dvh; position: absolute; bottom: 25px; z-index: -1;">
     <canvas id="sortingCanvas"></canvas>
   </div>
 
   <script>
     let numbers = []
+    let numberObjectStruct = {
+      priviousIndex: 0,
+      count: 0,
+      value: 0,
+      color: "skyblue"
+    }
+    let secondNumberObjects = []
     let currentIndex = -1
     let secondIndex = -1
     let thirdIndex = -1
@@ -145,13 +345,21 @@
     let mergeCombineIndex = 0
     let mergeCombineSize = 0
     let quickInplaceTime
+    let countingTime
+    let bucketTime
     let delayMs = parseInt(document.getElementById("delay").value)
     let numbersOfNumber = parseInt(document.getElementById("numbersOfNumber").value)
+    let upperBound = parseInt(document.getElementById("numbersUpperBound").value)
+    let lowerBound = parseInt(document.getElementById("numbersLowerBound").value)
 
+    // #region core algo
     function reset() {
       stopSort()
+      secondNumberObjects = []
       currentIndex = -1
       secondIndex = -1
+      upperBound = parseInt(document.getElementById("numbersUpperBound").value)
+      lowerBound = parseInt(document.getElementById("numbersLowerBound").value)
       generateNumbers(numbersOfNumber)
       // selectionTime.textContent = 0
     }
@@ -174,7 +382,7 @@
     function generateNumbers(count) {
       numbers = []
       for (let i = 0; i < count; i++) {
-        let randomNumber = Math.floor(Math.random() * 100) + 1; // 生成 1 到 100 之間的數字
+        let randomNumber = Math.floor(Math.random() * (upperBound - lowerBound)) + lowerBound + 1; // 生成 1 到 100 之間的數字
         numbers.push(randomNumber);
       }
     }
@@ -183,6 +391,17 @@
       numbers.push(numbers.shift())
     }
 
+    async function swap(i, j) {
+      currentIndex = i
+      secondIndex = j
+      await delay()
+      const t = numbers[i]
+      numbers[i] = numbers[j]
+      numbers[j] = t
+    }
+    // #endregion
+
+    // #region bubble sort
     function startBubbleSort() {
       bubbleTime.textContent = 0
       stopFlag = false
@@ -208,7 +427,9 @@
       if (haveSort) return bubbleSort(j + 1)
       stopFlag = true
     }
+    // #endregion
 
+    // #region selection sort
     function startSelectionSort() {
       selectionTime.textContent = 0
       stopFlag = false
@@ -241,7 +462,9 @@
       updateUseTimeLabel(insertionTime)
       insertionSort()
     }
+    // #endregion
 
+    // #region insertion sort
     async function insertionSort() {
       for (let i = 1; i < numbers.length + 1; i++) {
         for (let j = i - 1; j >= 1; j--) {
@@ -261,50 +484,9 @@
       }
       return stopFlag = true
     }
+    // #endregion
 
-    // function startMergeSort() {
-    //   mergeTime.textContent = 0
-    //   stopFlag = false
-    //   updateUseTimeLabel(mergeTime)
-    //   numbers = mergeSort(numbers)
-    //   // console.log(numbers)
-    //   return stopFlag = true
-    // }
-
-    // function mergeSort(arr) {
-    //   if (stopFlag) return
-
-    //   if (arr.length > 2) {
-    //     return mergeSortCombine(mergeSort(arr.slice(0, arr.length / 2)), mergeSort(arr.slice(arr.length / 2)))
-    //   } else if (arr.length == 2) return mergeSortSwap(arr)
-    //   return arr
-    // }
-
-    // function mergeSortSwap(arr) {
-    //   if (stopFlag) return
-
-    //   if (arr[1] < arr[0]) return [arr[1], arr[0]]
-    //   return arr
-    // }
-
-    // function mergeSortCombine(main, add) {
-    //   if (stopFlag) return
-
-    //   let merged = [];
-    //   let i = 0
-    //   let j = 0
-    //   while (merged.length < main.length + add.length) {
-    //     if (main[i] < add[j] || j >= add.length) {
-    //       merged.push(main[i])
-    //       i++
-    //     } else {
-    //       merged.push(add[j])
-    //       j++
-    //     }
-    //   }
-    //   return merged
-    // }
-
+    // #region merge sort with anima
     async function startMergeSortWithAnima() {
       mergeTime.textContent = 0
       mergeCombineIndex = 0
@@ -391,7 +573,9 @@
 
       return merged
     }
+    // #endregion
 
+    // #region quick sort inplace
     async function startQuickSortInplace() {
       stopFlag = false
       quickInplaceTime.textContent = 0
@@ -401,15 +585,6 @@
         thirdIndex = -1
         return stopFlag = true
       })
-    }
-
-    async function swap(i, j) {
-      currentIndex = i
-      secondIndex = j
-      await delay()
-      const t = numbers[i]
-      numbers[i] = numbers[j]
-      numbers[j] = t
     }
 
     async function quickSortInplace(arr, left, right) {
@@ -442,6 +617,83 @@
 
       return storeIndex
     }
+    // #endregion
+
+    // #region counting sort
+    async function startCountingSort() {
+      stopFlag = false
+      countingTime.textContent = 0
+      updateUseTimeLabel(countingTime)
+      // secondNumberObjects = [{}]
+      // for (let i = 0; i < 100; i++) {
+      //   secondNumberObjects.push({
+      //     count: 0,
+      //     value: i + 1,
+      //     color: "#969696"
+      //   })
+      //   await delay()
+      // }
+
+      await countingSort(numbers)
+    }
+
+    async function countingSort(arr) {
+      const counting = []
+      for (let i = 0; i < arr.length; i++) {
+        if (stopFlag) return
+        currentIndex = i
+        if (!secondNumberObjects[arr[i]]) {
+          for (let j = secondNumberObjects.length; j < arr[i] - 1; j++) {
+            if (stopFlag) return
+            secondNumberObjects.push({
+              count: 0,
+              value: j + 1,
+              color: "#969696"
+            })
+            await delay()
+          }
+          secondNumberObjects[arr[i]] = {
+            count: 1,
+            value: arr[i],
+            color: "skyblue"
+          }
+        } else {
+          secondNumberObjects[arr[i]].count++
+          secondNumberObjects[arr[i]].color = "skyblue"
+        }
+        if (!counting[arr[i]]) {
+          counting[arr[i]] = {
+            count: 1
+          }
+        } else {
+          counting[arr[i]].count++
+        }
+        await delay()
+      }
+
+      currentIndex = -1
+      let countingIndex = 0
+      while (counting.length > 0) {
+        if (stopFlag) return
+        const t = counting.shift()
+
+        if (t && t.count > 0) {
+          secondNumberObjects[countingIndex].color = "red"
+          for (let i = 0; i < t.count; i++) {
+            if (stopFlag) return
+
+            secondNumberObjects[countingIndex].count--
+            // t.count--
+            arr.shift()
+            arr.push(countingIndex)
+            await delay()
+          }
+        }
+        countingIndex++
+      }
+      return stopFlag = true
+    }
+    // #endregion
 
     ////
     //// Animation part.
@@ -454,15 +706,44 @@
       // 設置畫布背景
       ctx.clearRect(0, 0, canvas.width, canvas.height); // 清除畫布
 
+      if (secondNumberObjects.length != 0) {
+        ctx.fillStyle = '#ededed';
+        ctx.fillRect(0, 0, canvas.width, canvas.height / 2);
+        for (let i = 0; i < secondNumberObjects.length; i++) {
+          drawSecondBar(i)
+        }
+      }
+
       for (let i = 0; i < numbers.length; i++) {
         drawBar(i)
       }
-      return
+    }
+
+    function drawSecondBar(index) {
+      const numberObject = secondNumberObjects[index] ? secondNumberObjects[index] : {
+        count: 0,
+        value: index,
+        color: "#969696"
+      }
+
+      const barWidth = canvas.width / secondNumberObjects.length; // 每個長條的寬度
+      const barHeight = (((canvas.height - 30) * countingNumbersPercent(numberObject.value)) / 2)
+
+      ctx.fillStyle = numberObject.color
+      ctx.fillRect(index * barWidth, canvas.height / 2 - barHeight, barWidth - 2, barHeight)
+
+      ctx.fillStyle = 'black';
+      ctx.fillText(numberObject.count, index * barWidth + barWidth / 40, (canvas.height / 2 - barHeight / 2));
+
+      ctx.fillStyle = 'black';
+      ctx.fillText(numberObject.value, index * barWidth + barWidth / 40, (canvas.height / 2 - barHeight) - 10);
     }
 
     function drawBar(index) {
       const barWidth = canvas.width / numbers.length; // 每個長條的寬度
-      const barHeight = (canvas.height - 20) * numbers[index] / 100
+      const barHeight = secondNumberObjects.length == 0 ?
+        (canvas.height - 40) * countingNumbersPercent(numbers[index]) :
+        (((canvas.height - 40) * countingNumbersPercent(numbers[index])) / 2)
 
       index == secondIndex ? ctx.fillStyle = "lightgreen" :
         index == currentIndex ? ctx.fillStyle = "red" :
@@ -472,6 +753,10 @@
 
       ctx.fillStyle = 'black';
       ctx.fillText(numbers[index], index * barWidth + barWidth / 40, canvas.height - barHeight - 10);
+    }
+
+    function countingNumbersPercent(number) {
+      return (number - lowerBound) / (upperBound - lowerBound)
     }
 
     function updateVariable() {
@@ -489,6 +774,7 @@
       document.getElementById("insertionSortBtn").addEventListener("click", startInsertionSort)
       document.getElementById("mergeSortBtn").addEventListener("click", startMergeSortWithAnima)
       document.getElementById("quickSortInplaceBtn").addEventListener("click", startQuickSortInplace)
+      document.getElementById("countingSortBtn").addEventListener("click", startCountingSort)
       document.getElementById("resetBtn").addEventListener("click", reset)
       canvas = document.getElementById('sortingCanvas');
       bubbleTime = document.getElementById("bubbleTime")
@@ -496,6 +782,7 @@
       insertionTime = document.getElementById("insertionTime")
       mergeTime = document.getElementById("mergeTime")
       quickInplaceTime = document.getElementById("quickInplaceTime")
+      countingTime = document.getElementById("countingTime")
 
       canvas.width = div.offsetWidth;
       canvas.height = div.offsetHeight;
